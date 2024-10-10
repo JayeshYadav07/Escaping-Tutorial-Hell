@@ -18,6 +18,8 @@ const userSignup = async (req, res) => {
 			"INSERT INTO users (username,password) VALUES ($1, $2) RETURNING *",
 			[username, password]
 		);
+		const token = jwt.sign({ userId: newUser.rows[0].id }, jwtSecret);
+		res.cookie("token", token);
 
 		res.status(201).json({
 			message: "Registration successful",
